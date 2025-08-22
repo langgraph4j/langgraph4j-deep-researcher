@@ -1,0 +1,105 @@
+# Langgraph4j Deep Researcher 应用配置
+server:
+  port: 8080
+  servlet:
+    context-path: /
+  tomcat:
+    max-threads: 200
+    max-connections: 8192
+
+spring:
+  application:
+    name: langgraph4j-deep-researcher
+  profiles:
+    active: dev
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    default-property-inclusion: non_null
+
+# 深度研究核心配置
+deep-research:
+  # AI 模型配置
+  model:
+    api-key: ${CHAT_MODEL_API_KEY:your-api-key}
+    api-url: ${CHAT_MODEL_API_URL:https://api.openai.com/v1}
+    model-name: ${CHAT_MODEL_MODEL_NAME:gpt-4o-mini}
+    temperature: ${CHAT_MODEL_TEMPERATURE:0.1}
+    max-tokens: ${CHAT_MODEL_MAX_TOKENS:4096}
+    log-requests: ${CHAT_MODEL_LOG_REQUESTS:true}
+    log-responses: ${CHAT_MODEL_LOG_RESPONSES:true}
+  
+  # 搜索引擎配置
+  search:
+    default-engine: ${SEARCH_DEFAULT_ENGINE:tavily}
+    tavily:
+      api-key: ${TAVILY_API_KEY:your-api-key}
+      base-url: ${TAVILY_BASE_URL:https://api.tavily.com/}
+      search-depth: ${TAVILY_SEARCH_DEPTH:advanced}
+      include-answer: ${TAVILY_INCLUDE_ANSWER:false}
+      include-raw-content: ${TAVILY_INCLUDE_RAW_CONTENT:true}
+      timeout-seconds: ${TAVILY_TIMEOUT_SECONDS:30}
+  
+  # 研究流程配置
+  flow:
+    default-max-loops: ${RESEARCH_MAX_LOOPS:3}
+    default-max-search-results: ${RESEARCH_MAX_SEARCH_RESULTS:3}
+    default-fetch-full-page: ${RESEARCH_FETCH_FULL_PAGE:true}
+    max-tokens-per-source: ${RESEARCH_MAX_TOKENS_PER_SOURCE:1000}
+    chars-per-token: ${RESEARCH_CHARS_PER_TOKEN:4}
+
+  # 提示词配置
+  prompts:
+    query-generator: |
+      你是一个专业的研究助手，负责根据研究主题生成高质量的搜索查询。
+      
+      当前时间: {currentDate}
+      研究主题: {researchTopic}
+      
+      请为以下研究主题生成一个精确的搜索查询：
+      
+      要求：
+      1. 搜索查询应该准确捕捉研究主题的核心内容
+      2. 考虑当前时间，确保搜索最新信息
+      3. 查询应该足够具体以获得相关结果
+      4. 避免过于宽泛或过于狭窄的查询
+      
+      请直接输出搜索查询，无需解释。
+
+# 日志配置
+logging:
+  level:
+    io.github.imfangs.ai.deepresearch: DEBUG
+    dev.langchain4j: INFO
+    org.bsc.langgraph4j: INFO
+    org.springframework.web: INFO
+    org.springframework.security: INFO
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{requestId}] %logger{36} - %msg%n"
+    console: "%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr([%X{requestId}]){blue} %clr(%-5level){color} %clr(%logger{36}){cyan} %clr(-){faint} %msg%n"
+
+---
+# 开发环境配置
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+logging:
+  level:
+    root: INFO
+    io.github.imfangs.ai.deepresearch: DEBUG
+
+---
+# 生产环境配置
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+logging:
+  level:
+    root: WARN
+    io.github.imfangs.ai.deepresearch: INFO
+  file:
+    path: ./logs

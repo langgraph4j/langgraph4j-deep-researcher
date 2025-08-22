@@ -1,0 +1,45 @@
+# 测试环境配置
+spring:
+  main:
+    banner-mode: off
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
+# 深度研究测试配置
+deep-research:
+  model:
+    api-key: test-api-key
+    api-url: http://localhost:8080/mock-api
+    model-name: gpt-4o-mini
+    temperature: 0.1
+    max-tokens: 1000
+    log-requests: false
+    log-responses: false
+  
+  search:
+    default-engine: tavily
+    tavily:
+      api-key: test-api-key
+      base-url: http://localhost:8080/mock-tavily
+      search-depth: basic
+      include-answer: false
+      include-raw-content: false
+      timeout-seconds: 10
+  
+  flow:
+    default-max-loops: 2
+    default-max-search-results: 2
+    default-fetch-full-page: false
+    max-tokens-per-source: 500
+    chars-per-token: 4
+
+# 日志配置
+logging:
+  level:
+    io.github.imfangs.ai.deepresearch: WARN
+    dev.langchain4j: WARN
+    org.bsc.langgraph4j: WARN
+    org.springframework: WARN
+    org.springframework.web: WARN
+    org.springframework.test: INFO
