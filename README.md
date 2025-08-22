@@ -269,12 +269,3 @@ logging:
 ## 许可证
 
 本项目采用 [MIT License](LICENSE) 许可证。
-
-## 联系方式
-
-- **项目维护者**：AI Solution Team
-- **问题反馈**：[GitHub Issues](https://github.com/your-org/langgraph4j-deep-researcher/issues)
-
----
-
-**注意**：本项目基于 Langgraph4j 框架开发，需要相应的依赖和运行环境。请确保已正确配置 AI 服务和搜索API密钥。
