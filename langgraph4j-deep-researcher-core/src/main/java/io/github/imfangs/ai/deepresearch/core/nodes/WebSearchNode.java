@@ -13,9 +13,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Web搜索节点
+ * Web search node
  * 
- * 负责执行Web搜索并收集结果
+ * Responsible for executing web searches and collecting results
  * 
  * @author imfangs
  */
@@ -29,44 +29,44 @@ public class WebSearchNode implements NodeAction<ResearchState> {
     @Override
     public Map<String, Object> apply(ResearchState state) {
             try {
-                log.info("🌐 开始Web搜索");
+                log.info("🌐 Starting web search");
 
-                // 标记节点开始
+                // Mark node start
                 Map<String, Object> nodeStart = state.markNodeStart();
 
                 String searchQuery = state.searchQuery()
-                    .orElseThrow(() -> new IllegalStateException("缺少搜索查询"));
+                    .orElseThrow(() -> new IllegalStateException("Missing search query"));
 
                 String searchEngine = state.searchEngine();
                 Integer maxResults = state.maxSearchResults();
                 Boolean fetchFullPage = state.fetchFullPage();
 
-                log.info("使用搜索引擎: {}, 查询: {}, 最大结果数: {}, 获取完整页面: {}", 
+                log.info("Using search engine: {}, query: {}, max results: {}, fetch full page: {}", 
                     searchEngine, searchQuery, maxResults, fetchFullPage);
 
-                // 执行搜索
+                // Execute search
                 List<SearchResult> searchResults = searchEngineManager.search(
                     searchEngine, searchQuery, maxResults, fetchFullPage);
 
-                log.info("搜索完成，获得 {} 个结果", searchResults.size());
+                log.info("Search completed, obtained {} results", searchResults.size());
 
-                // 处理搜索结果
+                // Process search results
                 List<String> webResults = new ArrayList<>();
                 List<SearchResult> detailedResults = new ArrayList<>();
 
                 for (SearchResult result : searchResults) {
-                    // 添加到简单结果列表
+                    // Add to simple results list
                     String simpleResult = String.format("[%s] %s - %s", 
                         result.getTitle(), result.getUrl(), result.getContent());
                     webResults.add(simpleResult);
 
-                    // 添加到详细结果列表
+                    // Add to detailed results list
                     detailedResults.add(result);
 
-                    log.debug("搜索结果: {}", simpleResult);
+                    log.debug("Search result: {}", simpleResult);
                 }
 
-                // 返回状态更新
+                // Return state updates
                 return Map.of(
                     "web_search_results", webResults,
                     "detailed_search_results", detailedResults,
@@ -74,8 +74,8 @@ public class WebSearchNode implements NodeAction<ResearchState> {
                 );
 
             } catch (Exception e) {
-                log.error("Web搜索失败", e);
-                return state.setError("Web搜索失败: " + e.getMessage());
+                log.error("Web search failed", e);
+                return state.setError("Web search failed: " + e.getMessage());
             }
     }
 }

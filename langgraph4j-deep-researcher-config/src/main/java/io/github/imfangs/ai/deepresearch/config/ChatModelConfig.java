@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * LangChain4j 相关 Bean 配置
+ * LangChain4j related Bean configuration
  */
 @Configuration
 @RequiredArgsConstructor
@@ -16,7 +16,7 @@ public class ChatModelConfig {
     private final ResearchConfig researchConfig;
 
     /**
-     * 提供 ChatModel Bean，供各节点注入使用
+     * Provide ChatModel Bean for injection by various nodes
      */
     @Bean
     public ChatModel chatModel() {

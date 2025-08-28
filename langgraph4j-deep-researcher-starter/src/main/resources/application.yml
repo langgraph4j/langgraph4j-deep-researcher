@@ -1,4 +1,4 @@
-# Langgraph4j Deep Researcher 应用配置
+# Langgraph4j Deep Researcher Application Configuration
 server:
   port: 8080
   servlet:
@@ -17,9 +17,9 @@ spring:
     time-zone: GMT+8
     default-property-inclusion: non_null
 
-# 深度研究核心配置
+# Deep Research Core Configuration
 deep-research:
-  # AI 模型配置
+  # AI Model Configuration
   model:
     api-key: ${CHAT_MODEL_API_KEY:your-api-key}
     api-url: ${CHAT_MODEL_API_URL:https://api.openai.com/v1}
@@ -29,7 +29,7 @@ deep-research:
     log-requests: ${CHAT_MODEL_LOG_REQUESTS:true}
     log-responses: ${CHAT_MODEL_LOG_RESPONSES:true}
   
-  # 搜索引擎配置
+  # Search Engine Configuration
   search:
     default-engine: ${SEARCH_DEFAULT_ENGINE:tavily}
     tavily:
@@ -40,7 +40,7 @@ deep-research:
       include-raw-content: ${TAVILY_INCLUDE_RAW_CONTENT:true}
       timeout-seconds: ${TAVILY_TIMEOUT_SECONDS:30}
   
-  # 研究流程配置
+  # Research Flow Configuration
   flow:
     default-max-loops: ${RESEARCH_MAX_LOOPS:3}
     default-max-search-results: ${RESEARCH_MAX_SEARCH_RESULTS:3}
@@ -48,25 +48,25 @@ deep-research:
     max-tokens-per-source: ${RESEARCH_MAX_TOKENS_PER_SOURCE:1000}
     chars-per-token: ${RESEARCH_CHARS_PER_TOKEN:4}
 
-  # 提示词配置
+  # Prompt Configuration
   prompts:
     query-generator: |
-      你是一个专业的研究助手，负责根据研究主题生成高质量的搜索查询。
+      You are a professional research assistant responsible for generating high-quality search queries based on research topics.
       
-      当前时间: {currentDate}
-      研究主题: {researchTopic}
+      Current time: {currentDate}
+      Research topic: {researchTopic}
       
-      请为以下研究主题生成一个精确的搜索查询：
+      Please generate a precise search query for the following research topic:
       
-      要求：
-      1. 搜索查询应该准确捕捉研究主题的核心内容
-      2. 考虑当前时间，确保搜索最新信息
-      3. 查询应该足够具体以获得相关结果
-      4. 避免过于宽泛或过于狭窄的查询
+      Requirements:
+      1. The search query should accurately capture the core content of the research topic
+      2. Consider the current time to ensure searching for the latest information
+      3. The query should be specific enough to obtain relevant results
+      4. Avoid queries that are too broad or too narrow
       
-      请直接输出搜索查询，无需解释。
+      Please output the search query directly without explanation.
 
-# 日志配置
+# Logging Configuration
 logging:
   level:
     io.github.imfangs.ai.deepresearch: DEBUG
@@ -79,7 +79,7 @@ logging:
     console: "%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr([%X{requestId}]){blue} %clr(%-5level){color} %clr(%logger{36}){cyan} %clr(-){faint} %msg%n"
 
 ---
-# 开发环境配置
+# Development Environment Configuration
 spring:
   config:
     activate:
@@ -91,7 +91,7 @@ logging:
     io.github.imfangs.ai.deepresearch: DEBUG
 
 ---
-# 生产环境配置
+# Production Environment Configuration
 spring:
   config:
     activate:

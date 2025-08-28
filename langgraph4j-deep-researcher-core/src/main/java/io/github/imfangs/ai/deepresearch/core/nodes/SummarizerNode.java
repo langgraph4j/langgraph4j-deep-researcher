@@ -14,9 +14,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 总结节点
+ * Summarizer node
  * 
- * 负责总结搜索结果并更新运行中的总结
+ * Responsible for summarizing search results and updating the running summary
  * 
  * @author imfangs
  */
@@ -30,42 +30,42 @@ public class SummarizerNode implements NodeAction<ResearchState> {
     @Override
     public Map<String, Object> apply(ResearchState state) {
         try {
-            log.info("📝 开始总结搜索结果");
+            log.info("📝 Starting to summarize search results");
 
-            // 标记节点开始
+            // Mark node start
             Map<String, Object> nodeStart = state.markNodeStart();
 
             List<String> searchResults = state.webSearchResults();
             if (searchResults.isEmpty()) {
-                log.warn("没有搜索结果可供总结");
+                log.warn("No search results available for summarization");
                 return Map.of(
                     "current_node_start_time", nodeStart.get("current_node_start_time")
                 );
             }
 
             String researchTopic = state.researchTopic()
-                .orElseThrow(() -> new IllegalStateException("缺少研究主题"));
+                .orElseThrow(() -> new IllegalStateException("Missing research topic"));
 
-            // 构建提示词
+            // Build prompt
             String systemPrompt = PromptTemplates.SUMMARIZATION_SYSTEM;
             String userMessage = buildUserMessage(state, researchTopic, searchResults);
 
-            log.debug("总结系统提示词: {}", systemPrompt);
-            log.debug("总结用户消息长度: {} 字符", userMessage.length());
+            log.debug("Summarization system prompt: {}", systemPrompt);
+            log.debug("Summarization user message length: {} characters", userMessage.length());
 
-            // 调用LLM生成总结
+            // Call LLM to generate summary
             String newSummary = chatModel.chat(userMessage);
 
-            // 增加循环计数
+            // Increment loop count
             Integer newLoopCount = state.researchLoopCount() + 1;
 
-            log.info("总结完成，循环次数更新为: {}, 总结长度: {} 字符", 
+            log.info("Summarization completed, loop count updated to: {}, summary length: {} characters", 
                 newLoopCount, newSummary.length());
 
-            // 将源信息添加到收集列表
+            // Add source information to collection list
             List<String> newSources = extractSources(searchResults);
 
-            // 返回状态更新
+            // Return state updates
             return Map.of(
                 "running_summary", newSummary,
                 "research_loop_count", newLoopCount,
@@ -74,52 +74,52 @@ public class SummarizerNode implements NodeAction<ResearchState> {
             );
 
         } catch (Exception e) {
-            log.error("总结生成失败", e);
-            return state.setError("总结生成失败: " + e.getMessage());
+            log.error("Summary generation failed", e);
+            return state.setError("Summary generation failed: " + e.getMessage());
         }
     }
 
     /**
-     * 构建用户消息
+     * Build user message
      */
     private String buildUserMessage(ResearchState state, String researchTopic, List<String> searchResults) {
         StringBuilder userMessage = new StringBuilder();
-        userMessage.append("研究主题: ").append(researchTopic);
+        userMessage.append("Research topic: ").append(researchTopic);
 
-        // 如果有之前的总结，包含它
+        // If there is a previous summary, include it
         String previousSummary = state.runningSummary().orElse("");
         if (!previousSummary.isEmpty()) {
-            userMessage.append("\n\n之前的研究总结:\n").append(previousSummary);
+            userMessage.append("\n\nPrevious research summary:\n").append(previousSummary);
         }
 
-        // 添加新的搜索结果
-        userMessage.append("\n\n最新搜索结果:\n");
+        // Add new search results
+        userMessage.append("\n\nLatest search results:\n");
         for (int i = 0; i < searchResults.size(); i++) {
             userMessage.append(i + 1).append(". ").append(searchResults.get(i)).append("\n");
         }
 
-        userMessage.append("\n请结合之前的总结和新的搜索结果，生成一个更全面、更准确的研究总结。");
+        userMessage.append("\nPlease combine the previous summary and new search results to generate a more comprehensive and accurate research summary.");
 
         return userMessage.toString();
     }
 
     /**
-     * 从搜索结果中提取源信息
+     * Extract source information from search results
      */
     private List<String> extractSources(List<String> searchResults) {
         return searchResults.stream()
             .map(result -> {
-                // 提取URL部分作为源
+                // Extract URL part as source
                 if (result.contains(" - ")) {
                     String[] parts = result.split(" - ", 2);
                     if (parts.length > 0 && parts[0].contains("] ")) {
                         String[] titleUrl = parts[0].split("] ", 2);
                         if (titleUrl.length > 1) {
-                            return titleUrl[1]; // 返回URL部分
+                            return titleUrl[1]; // Return URL part
                         }
                     }
                 }
-                return result; // 如果无法解析，返回原始结果
+                return result; // If cannot parse, return original result
             })
             .toList();
     }

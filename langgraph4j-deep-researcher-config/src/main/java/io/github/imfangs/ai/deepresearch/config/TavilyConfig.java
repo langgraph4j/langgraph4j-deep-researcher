@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Tavily 配置
+ * Tavily configuration
  */
 @Data
 public class TavilyConfig {
@@ -17,29 +17,29 @@ public class TavilyConfig {
     private String apiKey;
 
     /**
-     * API 基础URL
+     * API base URL
      */
     private String baseUrl = "https://api.tavily.com/";
 
     /**
-     * 搜索深度
+     * Search depth
      */
     private String searchDepth = "advanced";
 
     /**
-     * 是否包含答案
+     * Whether to include answer
      */
     private Boolean includeAnswer = false;
 
     /**
-     * 是否包含原始内容
+     * Whether to include raw content
      */
     private Boolean includeRawContent = true;
 
     /**
-     * 请求超时时间（秒）
+     * Request timeout (seconds)
      */
-    @Min(value = 5, message = "超时时间至少为5秒")
-    @Max(value = 300, message = "超时时间不能超过300秒")
+    @Min(value = 5, message = "Timeout must be at least 5 seconds")
+    @Max(value = 300, message = "Timeout cannot exceed 300 seconds")
     private Integer timeoutSeconds = 30;
 }

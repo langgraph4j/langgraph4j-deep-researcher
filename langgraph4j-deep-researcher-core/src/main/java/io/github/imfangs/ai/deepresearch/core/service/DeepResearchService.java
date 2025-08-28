@@ -23,7 +23,7 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * 深度研究服务
+ * Deep research service
  * 
  * @author imfangs
  */
@@ -41,37 +41,37 @@ public class DeepResearchService {
     }
 
     /**
-     * 执行深度研究
+     * Execute deep research
      * 
-     * @param request 研究请求
-     * @return 研究响应
+     * @param request Research request
+     * @return Research response
      */
     public ResearchResponse executeResearch(ResearchRequest request) {
-        // 生成请求ID（如果未提供）
+        // Generate request ID (if not provided)
         String requestId = request.getRequestId() != null ? 
                 request.getRequestId() : UUID.randomUUID().toString();
 
-        log.info("🚀 开始执行深度研究，请求ID: {}, 研究主题: {}", requestId, request.getResearchTopic());
+        log.info("🚀 Starting deep research execution, request ID: {}, research topic: {}", requestId, request.getResearchTopic());
 
         LocalDateTime startTime = LocalDateTime.now();
         
         try {
-            // 构建 ChatModel
+            // Build ChatModel
             ChatModel chatModel = buildChatModel();
 
-            // 构建研究图
-            log.info("📊 构建研究状态图...");
+            // Build research graph
+            log.info("📊 Building research state graph...");
             var researchGraph = graphBuilder.createResearchGraph();
 
-            // 编译图
-            log.info("⚙️ 编译研究图...");
+            // Compile graph
+            log.info("⚙️ Compiling research graph...");
             CompileConfig compileConfig = CompileConfig.builder()
                 .checkpointSaver(new MemorySaver())
                 .build();
             
             CompiledGraph<ResearchState> compiledGraph = researchGraph.compile(compileConfig);
 
-            // 创建初始状态
+            // Create initial state
             Map<String, Object> initialState = graphBuilder.createInitialState(
                 request.getResearchTopic(),
                 requestId,
@@ -82,14 +82,14 @@ public class DeepResearchService {
                 request.getFetchFullPage()
             );
 
-            // 创建运行配置
+            // Create run configuration
             RunnableConfig runnableConfig = RunnableConfig.builder()
                 .threadId(requestId)
                 .build();
 
-            log.info("🎯 开始执行研究图，初始状态: {}", initialState.keySet());
+            log.info("🎯 Starting research graph execution, initial state: {}", initialState.keySet());
 
-            // 执行研究图
+            // Execute research graph
             ResearchState finalState = null;
             int nodeCount = 0;
             
@@ -97,51 +97,51 @@ public class DeepResearchService {
                 nodeCount++;
                 finalState = nodeOutput.state();
                 
-                String currentTopic = finalState.researchTopic().orElse("未知");
+                String currentTopic = finalState.researchTopic().orElse("Unknown");
                 int currentLoop = finalState.researchLoopCount();
                 boolean isSuccess = finalState.success();
                 
-                log.info("📋 节点[{}]执行完成 - 主题: {}, 循环: {}, 状态: {}", 
-                    nodeCount, currentTopic, currentLoop, isSuccess ? "正常" : "异常");
+                log.info("📋 Node[{}] execution completed - Topic: {}, Loop: {}, Status: {}", 
+                    nodeCount, currentTopic, currentLoop, isSuccess ? "Normal" : "Abnormal");
                 
-                // 如果出现错误，提前退出
+                // If error occurs, exit early
                 if (!isSuccess) {
-                    String errorMsg = finalState.errorMessage().orElse("未知错误");
-                    log.warn("⚠️ 研究过程中出现错误: {}", errorMsg);
+                    String errorMsg = finalState.errorMessage().orElse("Unknown error");
+                    log.warn("⚠️ Error occurred during research: {}", errorMsg);
                     break;
                 }
                 
-                // 防止无限循环
+                // Prevent infinite loop
                 if (nodeCount > 50) {
-                    log.warn("⚠️ 节点执行次数过多，强制退出");
+                    log.warn("⚠️ Too many node executions, forcing exit");
                     break;
                 }
             }
 
             if (finalState == null) {
-                throw new IllegalStateException("图执行未返回任何状态");
+                throw new IllegalStateException("Graph execution did not return any state");
             }
 
-            log.info("✅ 研究图执行完成，共执行 {} 个节点", nodeCount);
+            log.info("✅ Research graph execution completed, executed {} nodes", nodeCount);
 
             return buildSuccessResponse(request, requestId, finalState, startTime);
 
         } catch (GraphStateException e) {
-            log.error("❌ 图状态异常，请求ID: " + requestId, e);
-            return buildErrorResponse(request, requestId, "图状态异常: " + e.getMessage(), startTime);
+            log.error("❌ Graph state exception, request ID: " + requestId, e);
+            return buildErrorResponse(request, requestId, "Graph state exception: " + e.getMessage(), startTime);
         } catch (Exception e) {
-            log.error("❌ 深度研究执行失败，请求ID: " + requestId, e);
-            return buildErrorResponse(request, requestId, "研究执行失败: " + e.getMessage(), startTime);
+            log.error("❌ Deep research execution failed, request ID: " + requestId, e);
+            return buildErrorResponse(request, requestId, "Research execution failed: " + e.getMessage(), startTime);
         }
     }
 
     /**
-     * 构建 ChatModel
+     * Build ChatModel
      */
     private ChatModel buildChatModel() {
         ResearchModelConfig researchModelConfig = researchConfig.getModel();
 
-        log.info("🤖 构建 ChatModel，模型: {}, 温度: {}, 最大Token: {}", 
+        log.info("🤖 Building ChatModel, model: {}, temperature: {}, max tokens: {}", 
                 researchModelConfig.getModelName(), researchModelConfig.getTemperature(), researchModelConfig.getMaxTokens());
 
         return OpenAiChatModel.builder()
@@ -156,7 +156,7 @@ public class DeepResearchService {
     }
 
     /**
-     * 构建成功响应
+     * Build success response
      */
     private ResearchResponse buildSuccessResponse(
             ResearchRequest request, 
@@ -167,12 +167,12 @@ public class DeepResearchService {
         LocalDateTime endTime = LocalDateTime.now();
         long durationMs = java.time.Duration.between(startTime, endTime).toMillis();
 
-        String finalSummary = finalState.runningSummary().orElse("研究未能生成总结");
+        String finalSummary = finalState.runningSummary().orElse("Research failed to generate summary");
         List<String> sourcesGathered = finalState.sourcesGathered();
         Integer actualLoops = finalState.researchLoopCount();
         Boolean success = finalState.success();
 
-        log.info("📈 研究完成统计 - 循环: {}, 源: {}, 耗时: {}ms, 成功: {}", 
+        log.info("📈 Research completion statistics - Loops: {}, Sources: {}, Duration: {}ms, Success: {}", 
             actualLoops, sourcesGathered.size(), durationMs, success);
 
         return ResearchResponse.builder()
@@ -191,7 +191,7 @@ public class DeepResearchService {
     }
 
     /**
-     * 构建错误响应
+     * Build error response
      */
     private ResearchResponse buildErrorResponse(
             ResearchRequest request, 

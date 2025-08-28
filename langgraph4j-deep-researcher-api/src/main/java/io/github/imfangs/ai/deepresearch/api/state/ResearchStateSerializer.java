@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 import java.util.Map;
 
 /**
- * 研究状态序列化器
+ * Research state serializer
  * 
  * @author imfangs
  */
@@ -20,21 +20,21 @@ public class ResearchStateSerializer extends ObjectStreamStateSerializer<Researc
     public ResearchStateSerializer() {
         super(ResearchState::new);
         
-        // 注册自定义类型的序列化器
+        // Register custom type serializers
         mapper().register(SearchResult.class, new SearchResultSerializer());
         mapper().register(LocalDateTime.class, new LocalDateTimeSerializer());
     }
     
     /**
-     * SearchResult 序列化器
+     * SearchResult serializer
      * 
-     * 为 SearchResult 提供明确的序列化支持，确保所有字段正确序列化
+     * Provides explicit serialization support for SearchResult, ensuring all fields are correctly serialized
      */
     private static class SearchResultSerializer implements Serializer<SearchResult> {
         
         @Override
         public void write(SearchResult object, ObjectOutput out) throws IOException {
-            // 按字段顺序写入
+            // Write in field order
             out.writeObject(object.getTitle());
             out.writeObject(object.getUrl());
             out.writeObject(object.getContent());
@@ -46,7 +46,7 @@ public class ResearchStateSerializer extends ObjectStreamStateSerializer<Researc
 
         @Override
         public SearchResult read(ObjectInput in) throws IOException, ClassNotFoundException {
-            // 按相同顺序读取
+            // Read in the same order
             String title = (String) in.readObject();
             String url = (String) in.readObject();
             String content = (String) in.readObject();
@@ -69,21 +69,21 @@ public class ResearchStateSerializer extends ObjectStreamStateSerializer<Researc
     }
     
     /**
-     * LocalDateTime 序列化器
+     * LocalDateTime serializer
      * 
-     * 为 LocalDateTime 提供序列化支持，用于时间相关字段
+     * Provides serialization support for LocalDateTime, used for time-related fields
      */
     private static class LocalDateTimeSerializer implements Serializer<LocalDateTime> {
         
         @Override
         public void write(LocalDateTime object, ObjectOutput out) throws IOException {
-            // 转换为 ISO 字符串进行序列化
+            // Convert to ISO string for serialization
             out.writeObject(object.toString());
         }
 
         @Override
         public LocalDateTime read(ObjectInput in) throws IOException, ClassNotFoundException {
-            // 从 ISO 字符串恢复
+            // Restore from ISO string
             String isoString = (String) in.readObject();
             return LocalDateTime.parse(isoString);
         }

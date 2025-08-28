@@ -15,7 +15,7 @@
     <packaging>jar</packaging>
     
     <name>Langgraph4j Deep Researcher Config</name>
-    <description>配置管理模块</description>
+    <description>Configuration management module</description>
 
     <dependencies>
         <!-- Spring Boot Configuration Processor -->
@@ -59,7 +59,7 @@
             <artifactId>slf4j-api</artifactId>
         </dependency>
 
-        <!-- LangChain4j: ChatModel 实现 -->
+        <!-- LangChain4j: ChatModel implementation -->
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j</artifactId>

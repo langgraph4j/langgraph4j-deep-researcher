@@ -25,7 +25,7 @@ import static org.bsc.langgraph4j.action.AsyncEdgeAction.edge_async;
 import static org.bsc.langgraph4j.action.AsyncNodeAction.node_async;
 
 /**
- * 研究图构建器
+ * Research graph builder
  * 
  * @author imfangs
  */
@@ -42,18 +42,18 @@ public class ResearchGraphBuilder {
     private final RouterNode routerNode;
 
     /**
-     * 创建研究状态图
+     * Create research state graph
      * 
-     * 研究流程：
-     * 1. 生成搜索查询 (generate_query)
-     * 2. 执行Web搜索 (web_search)
-     * 3. 总结搜索结果 (summarize)
-     * 4. 反思和分析 (reflect)
-     * 5. 路由决策 (route) - 继续研究 or 结束
-     * 6. 最终化总结 (finalize)
+     * Research flow:
+     * 1. Generate search query (generate_query)
+     * 2. Execute web search (web_search)
+     * 3. Summarize search results (summarize)
+     * 4. Reflect and analyze (reflect)
+     * 5. Routing decision (route) - continue research or end
+     * 6. Finalize summary (finalize)
      */
     public StateGraph<ResearchState> createResearchGraph() throws GraphStateException {
-        log.info("创建深度研究状态图...");
+        log.info("Creating deep research state graph...");
 
         var serializer = new LC4jJacksonStateSerializer<ResearchState>(ResearchState::new);
         serializer.objectMapper().registerModule(new JavaTimeModule());
@@ -61,7 +61,7 @@ public class ResearchGraphBuilder {
 
 //        StateGraph<ResearchState> workflow = new StateGraph<>(ResearchState.SCHEMA, serializer)
         StateGraph<ResearchState> workflow = new StateGraph<>(ResearchState.SCHEMA, new ResearchStateSerializer())
-            // 添加研究节点
+            // Add research nodes
             .addNode("generate_query", node_async(queryGeneratorNode))
             .addNode("web_search", node_async(webSearchNode))
             .addNode("summarize", node_async(summarizerNode))
@@ -69,63 +69,63 @@ public class ResearchGraphBuilder {
             .addNode("route", node_async(routerNode))
             .addNode("finalize", node_async(finalizerNode))
 
-            // 设置入口点：开始时生成查询
+            // Set entry point: start with query generation
             .addEdge(START, "generate_query")
 
-            // 线性流程：查询 -> 搜索 -> 总结 -> 反思 -> 路由
+            // Linear flow: query -> search -> summarize -> reflect -> route
             .addEdge("generate_query", "web_search")
             .addEdge("web_search", "summarize")
             .addEdge("summarize", "reflect")
             .addEdge("reflect", "route")
 
-            // 路由条件边：根据路由决策继续或结束
+            // Conditional routing edges: continue or end based on routing decision
             .addConditionalEdges(
                 "route",
-                // 路由条件函数：检查是否继续研究
+                // Routing condition function: check if research should continue
                 edge_async(state -> {
-                    // 将AgentState转换为ResearchState以访问便利方法
+                    // Convert AgentState to ResearchState to access convenience methods
                     ResearchState researchState = new ResearchState(state.data());
                     
-                    // 检查是否达到最大循环次数
+                    // Check if maximum loop count is reached
                     if (researchState.hasReachedMaxLoops()) {
-                        log.info("已达到最大研究循环次数 {}, 结束研究", researchState.maxResearchLoops());
+                        log.info("Reached maximum research loop count {}, ending research", researchState.maxResearchLoops());
                         return "finalize";
                     }
 
-                    // 检查是否有错误
+                    // Check if there are any errors
                     if (!researchState.success()) {
-                        log.warn("研究过程中出现错误: {}, 结束研究", researchState.errorMessage().orElse("未知错误"));
+                        log.warn("Error occurred during research: {}, ending research", researchState.errorMessage().orElse("Unknown error"));
                         return "finalize";
                     }
 
-                    // 检查是否有足够的信息（基于总结长度的简单判断）
+                    // Check if sufficient information is available (simple judgment based on summary length)
                     String summary = researchState.runningSummary().orElse("");
                     if (summary.length() > 1000 && researchState.researchLoopCount() >= 2) {
-                        log.info("已收集到足够信息，循环次数: {}, 总结长度: {}", researchState.researchLoopCount(), summary.length());
+                        log.info("Sufficient information collected, loop count: {}, summary length: {}", researchState.researchLoopCount(), summary.length());
                         return "finalize";
                     }
 
-                    // 继续研究
-                    log.info("继续研究，当前循环次数: {}/{}", researchState.researchLoopCount(), researchState.maxResearchLoops());
+                    // Continue research
+                                            log.info("Continuing research, current loop count: {}/{}", researchState.researchLoopCount(), researchState.maxResearchLoops());
                     return "continue";
                 }),
 
-                // 路由映射
+                // Route mapping
                 Map.of(
-                    "continue", "generate_query",  // 继续研究：回到查询生成
-                    "finalize", "finalize"         // 结束研究：进入最终化
+                    "continue", "generate_query",  // Continue research: back to query generation
+                    "finalize", "finalize"         // End research: enter finalization
                 )
             )
 
-            // 最终化后结束
+            // End after finalization
             .addEdge("finalize", END);
 
-        log.info("研究状态图创建完成");
+        log.info("Research state graph creation completed");
         return workflow;
     }
 
     /**
-     * 创建初始状态
+     * Create initial state
      */
     public Map<String, Object> createInitialState(
             String researchTopic,

@@ -13,9 +13,9 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 
 /**
- * 查询生成节点
+ * Query generator node
  * 
- * 负责生成用于Web搜索的查询语句
+ * Responsible for generating query statements for web search
  * 
  * @author imfangs
  */
@@ -29,83 +29,83 @@ public class QueryGeneratorNode implements NodeAction<ResearchState> {
     @Override
     public Map<String, Object> apply(ResearchState state) {
         try {
-            log.info("🔍 开始生成搜索查询，循环次数: {}", state.researchLoopCount());
+            log.info("🔍 Starting to generate search query, loop count: {}", state.researchLoopCount());
 
-            // 标记节点开始
+            // Mark node start
             Map<String, Object> nodeStart = state.markNodeStart();
 
             String researchTopic = state.researchTopic()
-                .orElseThrow(() -> new IllegalStateException("缺少研究主题"));
+                .orElseThrow(() -> new IllegalStateException("Missing research topic"));
 
-            // 构建提示词
+            // Build prompt
             String systemPrompt = PromptTemplates.QUERY_GENERATION_SYSTEM;
             String userMessage = buildUserMessage(state, researchTopic);
 
-            log.debug("系统提示词: {}", systemPrompt);
-            log.debug("用户消息: {}", userMessage);
+            log.debug("System prompt: {}", systemPrompt);
+            log.debug("User message: {}", userMessage);
 
-            // 调用LLM生成查询
+            // Call LLM to generate query
             String response = chatModel.chat(userMessage);
 
-            // 清理响应，提取实际的搜索查询
+            // Clean response, extract actual search query
             String searchQuery = cleanResponse(response);
-            log.info("生成的搜索查询: {}", searchQuery);
+            log.info("Generated search query: {}", searchQuery);
 
-            // 返回状态更新
+            // Return state updates
             return Map.of(
                 "search_query", searchQuery,
                 "current_node_start_time", nodeStart.get("current_node_start_time")
             );
 
         } catch (Exception e) {
-            log.error("查询生成失败", e);
-            return state.setError("查询生成失败: " + e.getMessage());
+            log.error("Query generation failed", e);
+            return state.setError("Query generation failed: " + e.getMessage());
         }
     }
 
     /**
-     * 构建用户消息
+     * Build user message
      */
     private String buildUserMessage(ResearchState state, String researchTopic) {
         StringBuilder userMessage = new StringBuilder();
-        userMessage.append("研究主题: ").append(researchTopic);
+        userMessage.append("Research topic: ").append(researchTopic);
 
-        // 如果是后续循环，包含之前的总结
+        // If it's a subsequent loop, include previous summary
         if (state.researchLoopCount() > 0) {
             String previousSummary = state.runningSummary().orElse("");
             if (!previousSummary.isEmpty()) {
-                userMessage.append("\n\n当前研究进展:\n").append(previousSummary);
+                userMessage.append("\n\nCurrent research progress:\n").append(previousSummary);
             }
 
-            userMessage.append("\n\n请基于已有信息，生成一个新的搜索查询来深入研究或补充缺失的信息。");
+            userMessage.append("\n\nPlease generate a new search query based on existing information to conduct in-depth research or supplement missing information.");
         } else {
-            userMessage.append("\n\n这是第一次搜索，请生成一个全面的搜索查询来开始研究。");
+            userMessage.append("\n\nThis is the first search, please generate a comprehensive search query to start the research.");
         }
 
         return userMessage.toString();
     }
 
     /**
-     * 清理LLM响应，提取搜索查询
+     * Clean LLM response, extract search query
      */
     private String cleanResponse(String response) {
         if (response == null || response.trim().isEmpty()) {
-            throw new IllegalStateException("LLM 返回空响应");
+            throw new IllegalStateException("LLM returned empty response");
         }
 
-        // 移除可能的格式化标记
+        // Remove possible formatting markers
         String cleaned = response.trim()
             .replaceFirst("^搜索查询[:：]?\\s*", "")
             .replaceFirst("^查询[:：]?\\s*", "")
             .replaceFirst("^Query[:：]?\\s*", "")
-            .replaceAll("^[\"']|[\"']$", ""); // 移除引号
+            .replaceAll("^[\"']|[\"']$", ""); // Remove quotes
 
-        // 取第一行作为查询（防止LLM返回多行）
+        // Take first line as query (prevent LLM from returning multiple lines)
         String[] lines = cleaned.split("\n");
         String query = lines[0].trim();
 
         if (query.isEmpty()) {
-            throw new IllegalStateException("无法从 LLM 响应中提取有效查询");
+            throw new IllegalStateException("Unable to extract valid query from LLM response");
         }
 
         return query;

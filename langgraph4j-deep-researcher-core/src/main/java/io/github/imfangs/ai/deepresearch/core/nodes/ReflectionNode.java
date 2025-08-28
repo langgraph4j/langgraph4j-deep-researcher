@@ -13,9 +13,9 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 
 /**
- * 反思节点
+ * Reflection node
  * 
- * 负责分析当前总结，识别知识缺口和改进方向
+ * Responsible for analyzing current summary, identifying knowledge gaps and improvement directions
  * 
  * @author imfangs
  */
@@ -29,41 +29,41 @@ public class ReflectionNode implements NodeAction<ResearchState> {
     @Override
     public Map<String, Object> apply(ResearchState state) {
         try {
-            log.info("🤔 开始反思分析");
+            log.info("🤔 Starting reflection analysis");
 
-            // 标记节点开始
+            // Mark node start
             Map<String, Object> nodeStart = state.markNodeStart();
 
             String researchTopic = state.researchTopic()
-                .orElseThrow(() -> new IllegalStateException("缺少研究主题"));
+                .orElseThrow(() -> new IllegalStateException("Missing research topic"));
 
             String currentSummary = state.runningSummary().orElse("");
             if (currentSummary.isEmpty()) {
-                log.warn("没有总结可供反思");
+                log.warn("No summary available for reflection");
                 return Map.of(
                     "current_node_start_time", nodeStart.get("current_node_start_time")
                 );
             }
 
-            // 构建提示词
+            // Build prompt
             String systemPrompt = PromptTemplates.REFLECTION_SYSTEM;
             String userMessage = buildUserMessage(researchTopic, currentSummary, state);
 
-            log.debug("反思系统提示词: {}", systemPrompt);
-            log.debug("反思用户消息长度: {} 字符", userMessage.length());
+            log.debug("Reflection system prompt: {}", systemPrompt);
+            log.debug("Reflection user message length: {} characters", userMessage.length());
 
-            // 调用LLM进行反思分析
+            // Call LLM for reflection analysis
             String reflectionResult = chatModel.chat(userMessage);
 
-            log.info("反思分析完成，结果长度: {} 字符", reflectionResult.length());
-            log.debug("反思结果: {}", reflectionResult);
+            log.info("Reflection analysis completed, result length: {} characters", reflectionResult.length());
+            log.debug("Reflection result: {}", reflectionResult);
 
-            // 分析反思结果，决定是否需要继续研究
+            // Analyze reflection result, decide if more research is needed
             boolean needMoreResearch = analyzeReflectionResult(reflectionResult);
             
-            log.info("反思结论: {}", needMoreResearch ? "需要更多研究" : "信息已较为完整");
+            log.info("Reflection conclusion: {}", needMoreResearch ? "Need more research" : "Information is relatively complete");
 
-            // 返回状态更新（反思结果可以存储在metadata中）
+            // Return state updates (reflection results can be stored in metadata)
             return Map.of(
                 "metadata", Map.of(
                     "last_reflection", reflectionResult,
@@ -74,33 +74,33 @@ public class ReflectionNode implements NodeAction<ResearchState> {
             );
 
         } catch (Exception e) {
-            log.error("反思分析失败", e);
-            return state.setError("反思分析失败: " + e.getMessage());
+            log.error("Reflection analysis failed", e);
+            return state.setError("Reflection analysis failed: " + e.getMessage());
         }
     }
 
     /**
-     * 构建用户消息
+     * Build user message
      */
     private String buildUserMessage(String researchTopic, String currentSummary, ResearchState state) {
         StringBuilder userMessage = new StringBuilder();
-        userMessage.append("研究主题: ").append(researchTopic);
-        userMessage.append("\n\n当前循环次数: ").append(state.researchLoopCount());
+        userMessage.append("Research topic: ").append(researchTopic);
+        userMessage.append("\n\nCurrent loop count: ").append(state.researchLoopCount());
         userMessage.append("/").append(state.maxResearchLoops());
         
-        userMessage.append("\n\n当前研究总结:\n").append(currentSummary);
+        userMessage.append("\n\nCurrent research summary:\n").append(currentSummary);
 
-        // 添加已收集的源信息数量
+        // Add count of collected source information
         int sourcesCount = state.sourcesGathered().size();
-        userMessage.append("\n\n已收集源信息数量: ").append(sourcesCount);
+        userMessage.append("\n\nNumber of collected source information: ").append(sourcesCount);
 
-        userMessage.append("\n\n请分析当前总结的完整性和准确性，识别可能的知识缺口或需要补充的信息。");
+        userMessage.append("\n\nPlease analyze the completeness and accuracy of the current summary, identify possible knowledge gaps or information that needs to be supplemented.");
 
         return userMessage.toString();
     }
 
     /**
-     * 分析反思结果，判断是否需要更多研究
+     * Analyze reflection result, determine if more research is needed
      */
     private boolean analyzeReflectionResult(String reflectionResult) {
         if (reflectionResult == null || reflectionResult.trim().isEmpty()) {
@@ -109,7 +109,7 @@ public class ReflectionNode implements NodeAction<ResearchState> {
 
         String lowerResult = reflectionResult.toLowerCase();
 
-        // 寻找表示需要更多信息的关键词
+        // Look for keywords indicating need for more information
         String[] needMoreKeywords = {
             "需要更多", "缺少", "不足", "不完整", "需要补充", "需要进一步",
             "更深入", "更详细", "gap", "missing", "incomplete", "need more",
@@ -122,7 +122,7 @@ public class ReflectionNode implements NodeAction<ResearchState> {
             }
         }
 
-        // 寻找表示信息充足的关键词
+        // Look for keywords indicating sufficient information
         String[] sufficientKeywords = {
             "充足", "完整", "全面", "足够", "完善", "sufficient", "complete",
             "comprehensive", "adequate", "thorough"
@@ -134,7 +134,7 @@ public class ReflectionNode implements NodeAction<ResearchState> {
             }
         }
 
-        // 默认情况下，倾向于认为需要更多研究（除非明确表示充足）
+        // By default, tend to think more research is needed (unless explicitly stated as sufficient)
         return true;
     }
 }

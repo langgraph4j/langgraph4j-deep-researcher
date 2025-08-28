@@ -15,10 +15,10 @@
     <packaging>jar</packaging>
     
     <name>Langgraph4j Deep Researcher Tools</name>
-    <description>搜索工具集成模块</description>
+    <description>Search tool integration module</description>
 
     <dependencies>
-        <!-- 项目内部依赖 -->
+        <!-- Internal project dependencies -->
         <dependency>
             <groupId>io.github.imfangs.ai</groupId>
             <artifactId>langgraph4j-deep-researcher-api</artifactId>

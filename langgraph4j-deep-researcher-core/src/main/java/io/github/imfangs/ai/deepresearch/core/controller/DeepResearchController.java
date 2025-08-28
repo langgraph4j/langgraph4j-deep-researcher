@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.*;
 
 
 /**
- * 深度研究控制器
+ * Deep research controller
  * 
- * 提供深度研究的REST API接口
+ * Provides REST API interfaces for deep research
  * 
  * @author imfangs
  */
@@ -32,23 +32,23 @@ public class DeepResearchController {
     }
 
     /**
-     * 执行深度研究
+     * Execute deep research
      * 
-     * @param request 研究请求
-     * @return 研究响应
+     * @param request Research request
+     * @return Research response
      */
     @PostMapping("/execute")
     public ResponseEntity<ApiResponse<ResearchResponse>> executeResearch(
             @Valid @RequestBody ResearchRequest request) {
         
-        log.info("收到深度研究请求，主题: {}, 用户ID: {}", 
+        log.info("Received deep research request, topic: {}, user ID: {}", 
                 request.getResearchTopic(), request.getUserId());
         
         try {
             ResearchResponse response = deepResearchService.executeResearch(request);
             
             if (response.getSuccess()) {
-                return ResponseEntity.ok(ApiResponse.success(response, "研究执行成功"));
+                return ResponseEntity.ok(ApiResponse.success(response, "Research execution successful"));
             } else {
                 return ResponseEntity.ok(ApiResponse.error(
                         500, 
@@ -57,20 +57,20 @@ public class DeepResearchController {
             }
             
         } catch (Exception e) {
-            log.error("深度研究执行异常", e);
+            log.error("Deep research execution exception", e);
             return ResponseEntity.internalServerError()
-                    .body(ApiResponse.error(500, "系统内部错误: " + e.getMessage()));
+                    .body(ApiResponse.error(500, "Internal system error: " + e.getMessage()));
         }
     }
 
     /**
-     * 健康检查接口
+     * Health check endpoint
      * 
-     * @return 健康状态
+     * @return Health status
      */
     @GetMapping("/health")
     public ResponseEntity<ApiResponse<String>> health() {
-        return ResponseEntity.ok(ApiResponse.success("OK", "深度研究服务运行正常"));
+        return ResponseEntity.ok(ApiResponse.success("OK", "Deep research service running normally"));
     }
 
 }

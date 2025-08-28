@@ -15,10 +15,10 @@
     <packaging>jar</packaging>
     
     <name>Langgraph4j Deep Researcher Starter</name>
-    <description>启动模块和应用程序入口</description>
+    <description>Startup module and application entry point</description>
 
     <dependencies>
-        <!-- 项目内部依赖 -->
+        <!-- Internal project dependencies -->
         <dependency>
             <groupId>io.github.imfangs.ai</groupId>
             <artifactId>langgraph4j-deep-researcher-api</artifactId>
@@ -50,7 +50,7 @@
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
 
-        <!-- Langgraph4j 框架 -->
+        <!-- Langgraph4j framework -->
         <dependency>
             <groupId>org.bsc.langgraph4j</groupId>
             <artifactId>langgraph4j-core</artifactId>

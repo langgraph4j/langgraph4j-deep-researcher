@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * 深度研究状态模型
+ * Deep research state model
  * 
  * @author imfangs
  */
@@ -21,7 +21,7 @@ import java.util.Optional;
 public class ResearchState extends AgentState {
 
     /**
-     * 状态Schema定义
+     * State schema definition
      */
     public static final Map<String, Channel<?>> SCHEMA = Map.ofEntries(
         Map.entry("research_topic", Channels.base(null, null)),
@@ -45,39 +45,39 @@ public class ResearchState extends AgentState {
     );
 
     /**
-     * 构造函数
+     * Constructor
      * 
-     * @param initData 初始化数据
+     * @param initData Initialization data
      */
     public ResearchState(Map<String, Object> initData) {
         super(initData);
     }
 
-    // === 便利方法：获取状态值 ===
+    // === Convenience methods: Get state values ===
 
     /**
-     * 获取研究主题
+     * Get research topic
      */
     public Optional<String> researchTopic() {
         return this.value("research_topic");
     }
 
     /**
-     * 获取当前搜索查询
+     * Get current search query
      */
     public Optional<String> searchQuery() {
         return this.value("search_query");
     }
 
     /**
-     * 获取运行中的总结
+     * Get running summary
      */
     public Optional<String> runningSummary() {
         return this.value("running_summary");
     }
 
     /**
-     * 获取Web搜索结果
+     * Get web search results
      */
     @SuppressWarnings("unchecked")
     public List<String> webSearchResults() {
@@ -85,7 +85,7 @@ public class ResearchState extends AgentState {
     }
 
     /**
-     * 获取收集的源信息
+     * Get collected source information
      */
     @SuppressWarnings("unchecked")
     public List<String> sourcesGathered() {
@@ -93,7 +93,7 @@ public class ResearchState extends AgentState {
     }
 
     /**
-     * 获取详细搜索结果
+     * Get detailed search results
      */
     @SuppressWarnings("unchecked")
     public List<SearchResult> detailedSearchResults() {
@@ -101,129 +101,129 @@ public class ResearchState extends AgentState {
     }
 
     /**
-     * 获取研究循环计数
+     * Get research loop count
      */
     public Integer researchLoopCount() {
         return this.<Integer>value("research_loop_count").orElse(0);
     }
 
     /**
-     * 获取最大研究循环次数
+     * Get maximum research loop count
      */
     public Integer maxResearchLoops() {
         return this.<Integer>value("max_research_loops").orElse(3);
     }
 
     /**
-     * 是否获取完整页面内容
+     * Whether to fetch full page content
      */
     public Boolean fetchFullPage() {
         return this.<Boolean>value("fetch_full_page").orElse(true);
     }
 
     /**
-     * 获取最大搜索结果数
+     * Get maximum search result count
      */
     public Integer maxSearchResults() {
         return this.<Integer>value("max_search_results").orElse(3);
     }
 
     /**
-     * 获取搜索引擎类型
+     * Get search engine type
      */
     public String searchEngine() {
         return this.<String>value("search_engine").orElse("tavily");
     }
 
     /**
-     * 获取请求ID
+     * Get request ID
      */
     public Optional<String> requestId() {
         return this.value("request_id");
     }
 
     /**
-     * 获取用户ID
+     * Get user ID
      */
     public Optional<String> userId() {
         return this.value("user_id");
     }
 
     /**
-     * 获取开始时间
+     * Get start time
      */
     public Optional<LocalDateTime> startTime() {
         return this.value("start_time");
     }
 
     /**
-     * 获取当前节点开始时间
+     * Get current node start time
      */
     public Optional<LocalDateTime> currentNodeStartTime() {
         return this.value("current_node_start_time");
     }
 
     /**
-     * 获取错误信息
+     * Get error message
      */
     public Optional<String> errorMessage() {
         return this.value("error_message");
     }
 
     /**
-     * 是否成功
+     * Whether successful
      */
     public Boolean success() {
         return this.<Boolean>value("success").orElse(true);
     }
 
     /**
-     * 获取元数据
+     * Get metadata
      */
     @SuppressWarnings("unchecked")
     public Map<String, Object> metadata() {
         return this.<Map<String, Object>>value("metadata").orElse(Map.of());
     }
 
-    // === 便利方法：状态操作 ===
+    // === Convenience methods: State operations ===
 
     /**
-     * 检查是否达到最大循环次数
+     * Check if maximum loop count is reached
      */
     public boolean hasReachedMaxLoops() {
         return this.researchLoopCount() >= this.maxResearchLoops();
     }
 
     /**
-     * 增加循环计数
+     * Increment loop count
      */
     public Map<String, Object> incrementLoopCount() {
         return Map.of("research_loop_count", this.researchLoopCount() + 1);
     }
 
     /**
-     * 添加搜索结果
+     * Add search result
      */
     public Map<String, Object> addSearchResult(String result) {
         return Map.of("web_search_results", List.of(result));
     }
 
     /**
-     * 添加源信息
+     * Add source information
      */
     public Map<String, Object> addSource(String source) {
         return Map.of("sources_gathered", List.of(source));
     }
 
     /**
-     * 添加详细搜索结果
+     * Add detailed search result
      */
     public Map<String, Object> addDetailedSearchResult(SearchResult result) {
         return Map.of("detailed_search_results", List.of(result));
     }
 
     /**
-     * 设置错误状态
+     * Set error state
      */
     public Map<String, Object> setError(String errorMessage) {
         return Map.of(
@@ -233,14 +233,14 @@ public class ResearchState extends AgentState {
     }
 
     /**
-     * 标记节点开始
+     * Mark node start
      */
     public Map<String, Object> markNodeStart() {
         return Map.of("current_node_start_time", LocalDateTime.now());
     }
 
     /**
-     * 获取当前节点执行时长（毫秒）
+     * Get current node execution duration (milliseconds)
      */
     public long getCurrentNodeDuration() {
         Optional<LocalDateTime> startTime = this.currentNodeStartTime();
@@ -251,7 +251,7 @@ public class ResearchState extends AgentState {
     }
 
     /**
-     * 获取总执行时长（毫秒）
+     * Get total execution duration (milliseconds)
      */
     public long getTotalDuration() {
         Optional<LocalDateTime> startTime = this.startTime();
@@ -262,7 +262,7 @@ public class ResearchState extends AgentState {
     }
 
     /**
-     * 创建初始状态
+     * Create initial state
      */
     public static Map<String, Object> createInitialState(
             String researchTopic,

@@ -15,10 +15,10 @@
     <packaging>jar</packaging>
     
     <name>Langgraph4j Deep Researcher Core</name>
-    <description>核心业务逻辑模块</description>
+    <description>Core business logic module</description>
 
     <dependencies>
-        <!-- 项目内部依赖 -->
+        <!-- Internal project dependencies -->
         <dependency>
             <groupId>io.github.imfangs.ai</groupId>
             <artifactId>langgraph4j-deep-researcher-api</artifactId>
@@ -32,7 +32,7 @@
             <artifactId>langgraph4j-deep-researcher-tools</artifactId>
         </dependency>
 
-        <!-- Langgraph4j 框架 -->
+        <!-- Langgraph4j framework -->
         <dependency>
             <groupId>org.bsc.langgraph4j</groupId>
             <artifactId>langgraph4j-core</artifactId>

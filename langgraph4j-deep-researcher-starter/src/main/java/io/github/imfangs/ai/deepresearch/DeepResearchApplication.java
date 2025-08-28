@@ -11,7 +11,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 /**
- * Langgraph4j 深度研究应用程序主启动类
+ * Langgraph4j Deep Research Application main startup class
  * 
  * @author imfangs
  */
@@ -37,25 +37,25 @@ public class DeepResearchApplication {
             try {
                 hostAddress = InetAddress.getLocalHost().getHostAddress();
             } catch (UnknownHostException e) {
-                log.warn("无法获取主机地址", e);
+                log.warn("Unable to get host address", e);
             }
             
             log.info("""
                 
-                🚀 Langgraph4j Deep Researcher 启动成功！
+                🚀 Langgraph4j Deep Researcher started successfully!
                 
                 ===================================
-                🌐 应用访问地址:
+                🌐 Application Access URLs:
                    Local:    {}://localhost:{}{}
                    External: {}://{}:{}{}
                    
-                📚 API 文档:
-                   健康检查: {}/api/v1/research/health
-                   研究接口: {}/api/v1/research/execute
+                📚 API Documentation:
+                   Health Check: {}/api/v1/research/health
+                   Research Interface: {}/api/v1/research/execute
                    
-                🔧 配置信息:
+                🔧 Configuration Information:
                    Profile: {}
-                   Java版本: {}
+                   Java Version: {}
                 ===================================
                 """,
                 protocol, serverPort, contextPath,
@@ -67,7 +67,7 @@ public class DeepResearchApplication {
             );
             
         } catch (Exception e) {
-            log.error("应用启动失败", e);
+            log.error("Application startup failed", e);
             System.exit(1);
         }
     }

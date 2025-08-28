@@ -8,7 +8,7 @@ import org.springframework.validation.annotation.Validated;
 import jakarta.validation.Valid;
 
 /**
- * 深度研究核心配置类
+ * Deep research core configuration class
  *
  * @author imfangs
  */
@@ -19,19 +19,19 @@ import jakarta.validation.Valid;
 public class ResearchConfig {
 
     /**
-     * AI 模型配置
+     * AI model configuration
      */
     @Valid
     private ResearchModelConfig model = new ResearchModelConfig();
 
     /**
-     * 搜索引擎配置
+     * Search engine configuration
      */
     @Valid
     private SearchConfig search = new SearchConfig();
 
     /**
-     * 研究流程配置
+     * Research flow configuration
      */
     @Valid
     private FlowConfig flow = new FlowConfig();

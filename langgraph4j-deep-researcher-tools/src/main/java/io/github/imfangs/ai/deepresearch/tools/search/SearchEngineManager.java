@@ -11,8 +11,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * 搜索引擎管理器
- * 负责管理多个搜索引擎，提供统一的搜索接口
+ * Search engine manager
+ * Responsible for managing multiple search engines and providing a unified search interface
  * 
  * @author imfangs
  */
@@ -30,33 +30,33 @@ public class SearchEngineManager {
                 .collect(Collectors.toMap(
                     SearchEngine::getEngineName, 
                     engine -> engine,
-                    (existing, replacement) -> existing  // 如果有重复名称，保留现有的
+                    (existing, replacement) -> existing  // If duplicate names exist, keep the existing one
                 ));
         
-        log.info("搜索引擎管理器初始化完成，可用引擎: {}", 
+        log.info("Search engine manager initialization completed, available engines: {}", 
                 getAvailableEngines().stream()
                         .map(SearchEngine::getEngineName)
                         .collect(Collectors.joining(", ")));
     }
 
     /**
-     * 使用指定搜索引擎执行搜索
+     * Execute search using specified search engine
      *
-     * @param engineName 搜索引擎名称
-     * @param query 搜索查询
-     * @param maxResults 最大结果数
-     * @param fetchFullPage 是否获取完整页面内容
-     * @return 搜索结果列表
+     * @param engineName Search engine name
+     * @param query Search query
+     * @param maxResults Maximum number of results
+     * @param fetchFullPage Whether to fetch full page content
+     * @return List of search results
      */
     public List<SearchResult> search(String engineName, String query, int maxResults, boolean fetchFullPage) {
         SearchEngine engine = getSearchEngine(engineName);
         if (engine == null) {
-            log.error("未找到搜索引擎: {}", engineName);
+            log.error("Search engine not found: {}", engineName);
             return Collections.emptyList();
         }
 
         if (!engine.isAvailable()) {
-            log.warn("搜索引擎 {} 当前不可用", engineName);
+            log.warn("Search engine {} is currently unavailable", engineName);
             return Collections.emptyList();
         }
 
@@ -64,12 +64,12 @@ public class SearchEngineManager {
     }
 
     /**
-     * 使用默认搜索引擎执行搜索
+     * Execute search using default search engine
      *
-     * @param query 搜索查询
-     * @param maxResults 最大结果数
-     * @param fetchFullPage 是否获取完整页面内容
-     * @return 搜索结果列表
+     * @param query Search query
+     * @param maxResults Maximum number of results
+     * @param fetchFullPage Whether to fetch full page content
+     * @return List of search results
      */
     public List<SearchResult> searchWithDefault(String query, int maxResults, boolean fetchFullPage) {
         String defaultEngine = researchConfig.getSearch().getDefaultEngine();
@@ -77,10 +77,10 @@ public class SearchEngineManager {
     }
 
     /**
-     * 使用默认搜索引擎执行搜索（使用配置中的默认参数）
+     * Execute search using default search engine (using default parameters from configuration)
      *
-     * @param query 搜索查询
-     * @return 搜索结果列表
+     * @param query Search query
+     * @return List of search results
      */
     public List<SearchResult> searchWithDefault(String query) {
         FlowConfig flowConfig = researchConfig.getFlow();
@@ -92,19 +92,19 @@ public class SearchEngineManager {
     }
 
     /**
-     * 获取指定名称的搜索引擎
+     * Get search engine by name
      *
-     * @param engineName 搜索引擎名称
-     * @return 搜索引擎实例，如果不存在则返回null
+     * @param engineName Search engine name
+     * @return Search engine instance, returns null if not found
      */
     public SearchEngine getSearchEngine(String engineName) {
         return searchEngines.get(engineName);
     }
 
     /**
-     * 获取所有可用的搜索引擎
+     * Get all available search engines
      *
-     * @return 可用搜索引擎列表
+     * @return List of available search engines
      */
     public List<SearchEngine> getAvailableEngines() {
         return searchEngines.values().stream()
@@ -113,18 +113,18 @@ public class SearchEngineManager {
     }
 
     /**
-     * 获取所有搜索引擎名称
+     * Get all search engine names
      *
-     * @return 搜索引擎名称列表
+     * @return List of search engine names
      */
     public Set<String> getAllEngineNames() {
         return searchEngines.keySet();
     }
 
     /**
-     * 获取所有可用搜索引擎名称
+     * Get all available search engine names
      *
-     * @return 可用搜索引擎名称列表
+     * @return List of available search engine names
      */
     public List<String> getAvailableEngineNames() {
         return getAvailableEngines().stream()
@@ -133,10 +133,10 @@ public class SearchEngineManager {
     }
 
     /**
-     * 检查指定搜索引擎是否可用
+     * Check if specified search engine is available
      *
-     * @param engineName 搜索引擎名称
-     * @return 是否可用
+     * @param engineName Search engine name
+     * @return Whether available
      */
     public boolean isEngineAvailable(String engineName) {
         SearchEngine engine = getSearchEngine(engineName);
@@ -144,18 +144,18 @@ public class SearchEngineManager {
     }
 
     /**
-     * 去重和格式化搜索结果
+     * Deduplicate and format search results
      *
-     * @param searchResults 搜索结果列表
-     * @param maxTokensPerSource 每个源的最大token数
-     * @return 格式化的搜索结果字符串
+     * @param searchResults List of search results
+     * @param maxTokensPerSource Maximum tokens per source
+     * @return Formatted search results string
      */
     public String formatSearchResults(List<SearchResult> searchResults, int maxTokensPerSource) {
         if (searchResults == null || searchResults.isEmpty()) {
-            return "未找到相关搜索结果";
+            return "No relevant search results found";
         }
 
-        // 按URL去重
+        // Deduplicate by URL
         Map<String, SearchResult> uniqueResults = new LinkedHashMap<>();
         for (SearchResult result : searchResults) {
             if (!uniqueResults.containsKey(result.getUrl())) {
@@ -175,7 +175,7 @@ public class SearchEngineManager {
             formatted.append(String.format("URL: %s\n===\n", result.getUrl()));
             formatted.append(String.format("Most relevant content from source: %s\n===\n", result.getContent()));
 
-            // 如果有原始内容且长度超过限制，则截断
+            // If raw content exists and exceeds limit, truncate it
             if (result.getRawContent() != null && !result.getRawContent().isEmpty()) {
                 String rawContent = result.getRawContent();
                 if (rawContent.length() > maxChars) {

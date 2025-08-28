@@ -15,7 +15,7 @@
     <packaging>jar</packaging>
     
     <name>Langgraph4j Deep Researcher API</name>
-    <description>API 接口定义和数据传输对象</description>
+    <description>API interface definitions and data transfer objects</description>
 
     <dependencies>
         <!-- Spring Boot Web -->

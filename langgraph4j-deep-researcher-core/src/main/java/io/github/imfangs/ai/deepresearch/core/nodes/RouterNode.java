@@ -8,9 +8,9 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 
 /**
- * 路由节点
+ * Router node
  * 
- * 决定研究流程的下一步：继续研究或结束
+ * Determines the next step in the research flow: continue research or end
  * 
  * @author imfangs
  */
@@ -21,18 +21,18 @@ public class RouterNode implements NodeAction<ResearchState> {
     @Override
     public Map<String, Object> apply(ResearchState state) {
             try {
-                log.info("🛤️ 进行路由决策");
+                log.info("🛤️ Making routing decision");
 
-                // 标记节点开始
+                // Mark node start
                 Map<String, Object> nodeStart = state.markNodeStart();
 
-                // 路由决策逻辑在ResearchGraphBuilder中的条件边实现
-                // 这个节点主要用于记录决策过程和更新状态
+                // Routing decision logic is implemented in conditional edges in ResearchGraphBuilder
+                // This node is mainly used to record decision process and update state
 
                 String decision = makeRoutingDecision(state);
-                log.info("路由决策: {}", decision);
+                log.info("Routing decision: {}", decision);
 
-                // 返回状态更新
+                // Return state updates
                 return Map.of(
                     "metadata", Map.of(
                         "routing_decision", decision,
@@ -43,44 +43,44 @@ public class RouterNode implements NodeAction<ResearchState> {
                 );
 
             } catch (Exception e) {
-                log.error("路由决策失败", e);
-                return state.setError("路由决策失败: " + e.getMessage());
+                log.error("Routing decision failed", e);
+                return state.setError("Routing decision failed: " + e.getMessage());
             }
     }
 
     /**
-     * 路由决策逻辑
+     * Routing decision logic
      */
     private String makeRoutingDecision(ResearchState state) {
-        // 检查是否达到最大循环次数
+        // Check if maximum loop count is reached
         if (state.hasReachedMaxLoops()) {
-            return "达到最大循环次数，结束研究";
+            return "Reached maximum loop count, ending research";
         }
 
-        // 检查是否有错误
+        // Check if there are any errors
         if (!state.success()) {
-            return "检测到错误，结束研究";
+            return "Error detected, ending research";
         }
 
-        // 检查反思结果
+        // Check reflection results
         Map<String, Object> metadata = state.metadata();
         Boolean needMoreResearch = (Boolean) metadata.get("need_more_research");
         if (needMoreResearch != null && !needMoreResearch) {
-            return "反思表明信息充足，结束研究";
+            return "Reflection indicates sufficient information, ending research";
         }
 
-        // 检查信息量（基于总结长度和循环次数）
+        // Check information volume (based on summary length and loop count)
         String summary = state.runningSummary().orElse("");
         int loopCount = state.researchLoopCount();
         
         if (summary.length() > 1500 && loopCount >= 2) {
-            return "收集到充足信息，结束研究";
+            return "Sufficient information collected, ending research";
         }
 
         if (loopCount >= 1 && summary.length() > 2000) {
-            return "信息量已足够，结束研究";
+            return "Information volume is sufficient, ending research";
         }
 
-        return "继续研究以获取更多信息";
+        return "Continue research to obtain more information";
     }
 }

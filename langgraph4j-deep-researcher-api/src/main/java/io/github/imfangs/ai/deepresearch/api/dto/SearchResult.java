@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import java.util.Map;
 
 /**
- * 搜索结果数据传输对象
+ * Search result data transfer object
  * 
  * @author imfangs
  */
@@ -20,7 +20,7 @@ import java.util.Map;
 public class SearchResult {
 
     /**
-     * 标题
+     * Title
      */
     @JsonProperty("title")
     private String title;
@@ -32,31 +32,31 @@ public class SearchResult {
     private String url;
 
     /**
-     * 摘要内容
+     * Summary content
      */
     @JsonProperty("content")
     private String content;
 
     /**
-     * 原始页面内容（如果启用了获取完整页面）
+     * Raw page content (if full page fetching is enabled)
      */
     @JsonProperty("raw_content")
     private String rawContent;
 
     /**
-     * 相关性评分
+     * Relevance score
      */
     @JsonProperty("score")
     private Double score;
 
     /**
-     * 搜索引擎返回的额外元数据
+     * Additional metadata returned by search engine
      */
     @JsonProperty("metadata")
     private Map<String, Object> metadata;
 
     /**
-     * 源搜索引擎
+     * Source search engine
      */
     @JsonProperty("source_engine")
     private String sourceEngine;

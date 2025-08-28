@@ -5,33 +5,33 @@ import io.github.imfangs.ai.deepresearch.api.dto.SearchResult;
 import java.util.List;
 
 /**
- * 搜索引擎接口
+ * Search engine interface
  * 
  * @author imfangs
  */
 public interface SearchEngine {
 
     /**
-     * 执行搜索
+     * Execute search
      *
-     * @param query 搜索查询
-     * @param maxResults 最大结果数
-     * @param fetchFullPage 是否获取完整页面内容
-     * @return 搜索结果列表
+     * @param query Search query
+     * @param maxResults Maximum number of results
+     * @param fetchFullPage Whether to fetch full page content
+     * @return List of search results
      */
     List<SearchResult> search(String query, int maxResults, boolean fetchFullPage);
 
     /**
-     * 获取搜索引擎名称
+     * Get search engine name
      *
-     * @return 搜索引擎名称
+     * @return Search engine name
      */
     String getEngineName();
 
     /**
-     * 检查搜索引擎是否可用
+     * Check if search engine is available
      *
-     * @return 是否可用
+     * @return Whether available
      */
     boolean isAvailable();
 }

@@ -11,23 +11,23 @@
     <packaging>pom</packaging>
     
     <name>Langgraph4j Deep Researcher</name>
-    <description>基于 Langgraph4j 框架的深度研究助手，复刻 local-deep-researcher 功能</description>
+    <description>Deep research assistant based on Langgraph4j framework, replicating local-deep-researcher functionality</description>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         
-        <!-- Spring Boot 版本 -->
+        <!-- Spring Boot version -->
         <spring-boot.version>3.1.0</spring-boot.version>
         
-        <!-- Langgraph4j 框架版本 -->
+        <!-- Langgraph4j framework version -->
         <langgraph4j.version>1.6.0</langgraph4j.version> <!-- Check for the actual latest version -->
 
-        <!-- LangChain4j 版本 -->
+        <!-- LangChain4j version -->
         <langchain4j.version>1.3.0</langchain4j.version>
         
-        <!-- 工具库版本 -->
+        <!-- Utility library versions -->
         <jackson.version>2.15.2</jackson.version>
         <lombok.version>1.18.28</lombok.version>
         <slf4j.version>2.0.7</slf4j.version>
@@ -53,7 +53,7 @@
                 <scope>import</scope>
             </dependency>
             
-            <!-- 项目内部模块 -->
+            <!-- Internal project modules -->
             <dependency>
                 <groupId>io.github.imfangs.ai</groupId>
                 <artifactId>langgraph4j-deep-researcher-api</artifactId>
@@ -75,7 +75,7 @@
                 <version>${project.version}</version>
             </dependency>
 
-            <!-- Langgraph4j 框架 -->
+            <!-- Langgraph4j framework -->
             <dependency>
                 <groupId>org.bsc.langgraph4j</groupId>
                 <artifactId>langgraph4j-bom</artifactId>
@@ -108,10 +108,11 @@
             <dependency>
                 <groupId>dev.langchain4j</groupId>
                 <artifactId>langchain4j-web-search-engine-tavily</artifactId>
-                <version>${langchain4j.version}</version>
+<!--                <version>${langchain4j.version}</version>-->
+                <version>1.2.0-beta8</version>
             </dependency>
 
-            <!-- 工具库 -->
+            <!-- Utility libraries -->
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
@@ -129,7 +130,7 @@
                 <version>${slf4j.version}</version>
             </dependency>
 
-            <!-- 测试依赖 -->
+            <!-- Test dependencies -->
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter</artifactId>

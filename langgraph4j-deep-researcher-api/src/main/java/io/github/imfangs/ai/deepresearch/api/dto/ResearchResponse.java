@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * 深度研究响应
+ * Deep research response
  * 
  * @author imfangs
  */
@@ -21,79 +21,79 @@ import java.util.List;
 public class ResearchResponse {
 
     /**
-     * 请求ID
+     * Request ID
      */
     @JsonProperty("request_id")
     private String requestId;
 
     /**
-     * 研究主题
+     * Research topic
      */
     @JsonProperty("research_topic")
     private String researchTopic;
 
     /**
-     * 最终研究报告（Markdown格式）
+     * Final research report (Markdown format)
      */
     @JsonProperty("final_summary")
     private String finalSummary;
 
     /**
-     * 实际执行的研究循环次数
+     * Actual number of research loops executed
      */
     @JsonProperty("actual_loops")
     private Integer actualLoops;
 
     /**
-     * 研究过程中收集的所有源信息
+     * All source information collected during research
      */
     @JsonProperty("sources_gathered")
     private List<String> sourcesGathered;
 
     /**
-     * 研究开始时间
+     * Research start time
      */
     @JsonProperty("start_time")
     private LocalDateTime startTime;
 
     /**
-     * 研究结束时间
+     * Research end time
      */
     @JsonProperty("end_time")
     private LocalDateTime endTime;
 
     /**
-     * 总耗时（毫秒）
+     * Total duration (milliseconds)
      */
     @JsonProperty("duration_ms")
     private Long durationMs;
 
     /**
-     * 是否成功完成
+     * Whether successfully completed
      */
     @JsonProperty("success")
     private Boolean success;
 
     /**
-     * 错误信息（如果失败）
+     * Error message (if failed)
      */
     @JsonProperty("error_message")
     private String errorMessage;
 
     /**
-     * 研究状态
+     * Research status
      */
     @JsonProperty("status")
     private ResearchStatus status;
 
     /**
-     * 研究状态枚举
+     * Research status enumeration
      */
     public enum ResearchStatus {
-        PENDING,     // 等待开始
-        IN_PROGRESS, // 进行中
-        COMPLETED,   // 已完成
-        FAILED,      // 失败
-        CANCELLED    // 已取消
+        PENDING,     // Waiting to start
+        IN_PROGRESS, // In progress
+        COMPLETED,   // Completed
+        FAILED,      // Failed
+        CANCELLED    // Cancelled
     }
 }

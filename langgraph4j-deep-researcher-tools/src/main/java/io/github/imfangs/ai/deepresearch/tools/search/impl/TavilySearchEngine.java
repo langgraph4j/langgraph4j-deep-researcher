@@ -19,7 +19,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Tavily 搜索引擎实现
+ * Tavily search engine implementation
  * 
  * @author imfangs
  */
@@ -37,7 +37,7 @@ public class TavilySearchEngine implements SearchEngine {
     }
 
     /**
-     * 初始化搜索引擎
+     * Initialize search engine
      */
     private void initializeSearchEngine() {
         try {
@@ -45,7 +45,7 @@ public class TavilySearchEngine implements SearchEngine {
                 researchConfig.getSearch().getTavily();
             
             if (!StringUtils.hasText(tavilyConfig.getApiKey())) {
-                log.warn("Tavily API Key 未配置，Tavily 搜索引擎将不可用");
+                log.warn("Tavily API Key not configured, Tavily search engine will be unavailable");
                 return;
             }
 
@@ -58,21 +58,21 @@ public class TavilySearchEngine implements SearchEngine {
                     .includeRawContent(tavilyConfig.getIncludeRawContent())
                     .build();
 
-            log.info("Tavily 搜索引擎初始化成功");
+            log.info("Tavily search engine initialized successfully");
         } catch (Exception e) {
-            log.error("Tavily 搜索引擎初始化失败", e);
+            log.error("Tavily search engine initialization failed", e);
         }
     }
 
     @Override
     public List<SearchResult> search(String query, int maxResults, boolean fetchFullPage) {
         if (!isAvailable()) {
-            log.warn("Tavily 搜索引擎不可用，返回空结果");
+            log.warn("Tavily search engine unavailable, returning empty results");
             return Collections.emptyList();
         }
 
         try {
-            log.info("使用 Tavily 搜索: query={}, maxResults={}, fetchFullPage={}", 
+            log.info("Using Tavily search: query={}, maxResults={}, fetchFullPage={}", 
                     query, maxResults, fetchFullPage);
 
             WebSearchRequest request = WebSearchRequest.builder()
@@ -86,22 +86,22 @@ public class TavilySearchEngine implements SearchEngine {
                     .map(this::convertToSearchResult)
                     .collect(Collectors.toList());
 
-            log.info("Tavily 搜索完成，获得 {} 个结果", searchResults.size());
+            log.info("Tavily search completed, obtained {} results", searchResults.size());
             return searchResults;
 
         } catch (Exception e) {
-            log.error("Tavily 搜索失败: query=" + query, e);
+            log.error("Tavily search failed: query=" + query, e);
             return Collections.emptyList();
         }
     }
 
     /**
-     * 转换 LangChain4j 搜索结果为内部格式
+     * Convert LangChain4j search results to internal format
      */
     private SearchResult convertToSearchResult(WebSearchOrganicResult result) {
         Map<String, Object> metadata = new HashMap<>();
         
-        // 添加额外元数据
+        // Add additional metadata
         if (result.metadata() != null) {
             metadata.putAll(result.metadata());
         }
@@ -118,7 +118,7 @@ public class TavilySearchEngine implements SearchEngine {
     }
 
     /**
-     * 从元数据中提取相关性评分
+     * Extract relevance score from metadata
      */
     private Double extractScore(Map<String, String> metadata) {
         if (metadata == null) {
@@ -130,7 +130,7 @@ public class TavilySearchEngine implements SearchEngine {
             try {
                 return Double.parseDouble(scoreStr);
             } catch (NumberFormatException e) {
-                log.debug("无法解析评分: {}", scoreStr);
+                log.debug("Unable to parse score: {}", scoreStr);
             }
         }
         

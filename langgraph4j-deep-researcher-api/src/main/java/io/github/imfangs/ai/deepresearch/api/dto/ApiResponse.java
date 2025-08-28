@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 /**
- * 统一API响应包装类
+ * Unified API response wrapper class
  * 
- * @param <T> 响应数据类型
+ * @param <T> Response data type
  * @author imfangs
  */
 @Data
@@ -21,46 +21,46 @@ import java.time.LocalDateTime;
 public class ApiResponse<T> {
 
     /**
-     * 响应状态码
+     * Response status code
      */
     @JsonProperty("code")
     @Builder.Default
     private Integer code = 200;
 
     /**
-     * 响应消息
+     * Response message
      */
     @JsonProperty("message")
     @Builder.Default
     private String message = "success";
 
     /**
-     * 响应数据
+     * Response data
      */
     @JsonProperty("data")
     private T data;
 
     /**
-     * 请求ID
+     * Request ID
      */
     @JsonProperty("request_id")
     private String requestId;
 
     /**
-     * 响应时间戳
+     * Response timestamp
      */
     @JsonProperty("timestamp")
     @Builder.Default
     private LocalDateTime timestamp = LocalDateTime.now();
 
     /**
-     * 请求耗时（毫秒）
+     * Request duration (milliseconds)
      */
     @JsonProperty("duration_ms")
     private Long durationMs;
 
     /**
-     * 创建成功响应
+     * Create success response
      */
     public static <T> ApiResponse<T> success(T data) {
         return ApiResponse.<T>builder()
@@ -71,7 +71,7 @@ public class ApiResponse<T> {
     }
 
     /**
-     * 创建成功响应（带请求ID）
+     * Create success response (with request ID)
      */
     public static <T> ApiResponse<T> success(T data, String requestId) {
         return ApiResponse.<T>builder()
@@ -83,7 +83,7 @@ public class ApiResponse<T> {
     }
 
     /**
-     * 创建失败响应
+     * Create error response
      */
     public static <T> ApiResponse<T> error(Integer code, String message) {
         return ApiResponse.<T>builder()
@@ -93,7 +93,7 @@ public class ApiResponse<T> {
     }
 
     /**
-     * 创建失败响应（带请求ID）
+     * Create error response (with request ID)
      */
     public static <T> ApiResponse<T> error(Integer code, String message, String requestId) {
         return ApiResponse.<T>builder()
@@ -104,14 +104,14 @@ public class ApiResponse<T> {
     }
 
     /**
-     * 创建参数错误响应
+     * Create bad request response
      */
     public static <T> ApiResponse<T> badRequest(String message) {
         return error(400, message);
     }
 
     /**
-     * 创建服务器错误响应
+     * Create server error response
      */
     public static <T> ApiResponse<T> serverError(String message) {
         return error(500, message);

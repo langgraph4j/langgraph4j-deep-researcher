@@ -8,24 +8,24 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * 搜索配置
+ * Search configuration
  */
 @Data
 public class SearchConfig {
 
     /**
-     * 默认搜索引擎
+     * Default search engine
      */
-    @NotBlank(message = "默认搜索引擎不能为空")
+    @NotBlank(message = "Default search engine cannot be empty")
     private String defaultEngine = "tavily";
 
     /**
-     * Tavily API 配置
+     * Tavily API configuration
      */
     @Valid
     private TavilyConfig tavily = new TavilyConfig();
 
-    // Getter 方法
+    // Getter method
     public TavilyConfig getTavily() {
         return tavily;
     }

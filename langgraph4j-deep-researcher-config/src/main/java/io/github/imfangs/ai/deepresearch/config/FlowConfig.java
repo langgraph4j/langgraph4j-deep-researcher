@@ -8,41 +8,41 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * 研究流程配置
+ * Research flow configuration
  */
 @Data
 public class FlowConfig {
 
     /**
-     * 默认最大研究循环次数
+     * Default maximum research loop count
      */
-    @Min(value = 1, message = "研究循环次数至少为1次")
-    @Max(value = 10, message = "研究循环次数最多为10次")
+    @Min(value = 1, message = "Research loop count must be at least 1")
+    @Max(value = 10, message = "Research loop count cannot exceed 10")
     private Integer defaultMaxLoops = 3;
 
     /**
-     * 默认每次搜索的最大结果数
+     * Default maximum search results per search
      */
-    @Min(value = 1, message = "搜索结果数至少为1")
-    @Max(value = 10, message = "搜索结果数最多为10")
+    @Min(value = 1, message = "Search result count must be at least 1")
+    @Max(value = 10, message = "Search result count cannot exceed 10")
     private Integer defaultMaxSearchResults = 3;
 
     /**
-     * 是否默认获取完整页面内容
+     * Whether to fetch full page content by default
      */
     private Boolean defaultFetchFullPage = true;
 
     /**
-     * 每个源的最大token数
+     * Maximum tokens per source
      */
-    @Min(value = 100, message = "每个源的最大token数至少为100")
-    @Max(value = 2000, message = "每个源的最大token数不能超过2000")
+    @Min(value = 100, message = "Maximum tokens per source must be at least 100")
+    @Max(value = 2000, message = "Maximum tokens per source cannot exceed 2000")
     private Integer maxTokensPerSource = 1000;
 
     /**
-     * 字符到token的转换比例
+     * Character to token conversion ratio
      */
-    @Min(value = 2, message = "字符到token转换比例至少为2")
-    @Max(value = 10, message = "字符到token转换比例不能超过10")
+    @Min(value = 2, message = "Character to token conversion ratio must be at least 2")
+    @Max(value = 10, message = "Character to token conversion ratio cannot exceed 10")
     private Integer charsPerToken = 4;
 }

@@ -1,4 +1,4 @@
-# 测试环境配置
+# Test environment configuration
 spring:
   main:
     banner-mode: off
@@ -6,7 +6,7 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
 
-# 深度研究测试配置
+# Deep research test configuration
 deep-research:
   model:
     api-key: test-api-key
@@ -34,7 +34,7 @@ deep-research:
     max-tokens-per-source: 500
     chars-per-token: 4
 
-# 日志配置
+# Logging configuration
 logging:
   level:
     io.github.imfangs.ai.deepresearch: WARN

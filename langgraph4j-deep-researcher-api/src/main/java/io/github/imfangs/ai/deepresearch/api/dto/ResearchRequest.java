@@ -12,7 +12,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 /**
- * 深度研究请求
+ * Deep research request
  * 
  * @author imfangs
  */
@@ -23,53 +23,53 @@ import jakarta.validation.constraints.Size;
 public class ResearchRequest {
 
     /**
-     * 研究主题 - 用户想要深入了解的主题
+     * Research topic - The topic the user wants to explore in depth
      */
-    @NotBlank(message = "研究主题不能为空")
-    @Size(max = 500, message = "研究主题不能超过500个字符")
+    @NotBlank(message = "Research topic cannot be empty")
+    @Size(max = 500, message = "Research topic cannot exceed 500 characters")
     @JsonProperty("research_topic")
     private String researchTopic;
 
     /**
-     * 最大研究循环次数 - 控制深度研究的迭代次数
+     * Maximum research loop count - Controls the number of iterations for deep research
      */
-    @Min(value = 1, message = "研究循环次数至少为1次")
-    @Max(value = 10, message = "研究循环次数最多为10次")
+    @Min(value = 1, message = "Research loop count must be at least 1")
+    @Max(value = 10, message = "Research loop count cannot exceed 10")
     @JsonProperty("max_research_loops")
     @Builder.Default
     private Integer maxResearchLoops = 3;
 
     /**
-     * 搜索引擎类型 - 指定使用的搜索工具
+     * Search engine type - Specifies the search tool to use
      */
     @JsonProperty("search_engine")
     @Builder.Default
     private String searchEngine = "tavily";
 
     /**
-     * 是否获取完整页面内容
+     * Whether to fetch full page content
      */
     @JsonProperty("fetch_full_page")
     @Builder.Default
     private Boolean fetchFullPage = true;
 
     /**
-     * 每次搜索的最大结果数
+     * Maximum number of search results per search
      */
-    @Min(value = 1, message = "搜索结果数至少为1")
-    @Max(value = 10, message = "搜索结果数最多为10")
+    @Min(value = 1, message = "Search result count must be at least 1")
+    @Max(value = 10, message = "Search result count cannot exceed 10")
     @JsonProperty("max_search_results")
     @Builder.Default
     private Integer maxSearchResults = 3;
 
     /**
-     * 请求ID - 用于追踪和日志记录
+     * Request ID - Used for tracking and logging
      */
     @JsonProperty("request_id")
     private String requestId;
 
     /**
-     * 用户ID - 用于会话管理和个性化
+     * User ID - Used for session management and personalization
      */
     @JsonProperty("user_id")
     private String userId;

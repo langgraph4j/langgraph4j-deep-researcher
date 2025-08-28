@@ -4,7 +4,7 @@ import jakarta.validation.constraints.*;
 import lombok.Data;
 
 /**
- * Research Model 配置
+ * Research Model Configuration
  */
 @Data
 public class ResearchModelConfig {
@@ -12,42 +12,42 @@ public class ResearchModelConfig {
     /**
      * App ID
      */
-    @NotBlank(message = "API KEY 不能为空")
+    @NotBlank(message = "API KEY cannot be empty")
     private String apiKey;
 
     /**
      * API URL
      */
-    @NotBlank(message = "API URL 不能为空")
+    @NotBlank(message = "API URL cannot be empty")
     private String apiUrl;
 
     /**
-     * 默认使用的模型名称
+     * Default model name to use
      */
-    @NotBlank(message = "模型名称不能为空")
+    @NotBlank(message = "Model name cannot be empty")
     private String modelName = "gpt-4o-mini";
 
     /**
-     * 模型温度参数
+     * Model temperature parameter
      */
-    @DecimalMin(value = "0.0", message = "温度参数不能小于0")
-    @DecimalMax(value = "2.0", message = "温度参数不能大于2")
+    @DecimalMin(value = "0.0", message = "Temperature parameter cannot be less than 0")
+    @DecimalMax(value = "2.0", message = "Temperature parameter cannot be greater than 2")
     private Double temperature = 0.1;
 
     /**
-     * 最大token数
+     * Maximum token count
      */
-    @Min(value = 100, message = "最大token数至少为100")
-    @Max(value = 16000, message = "最大token数不能超过16000")
+    @Min(value = 100, message = "Maximum token count must be at least 100")
+    @Max(value = 16000, message = "Maximum token count cannot exceed 16000")
     private Integer maxTokens = 4096;
 
     /**
-     * 是否启用请求日志
+     * Whether to enable request logging
      */
     private Boolean logRequests = true;
 
     /**
-     * 是否启用响应日志
+     * Whether to enable response logging
      */
     private Boolean logResponses = true;
 }

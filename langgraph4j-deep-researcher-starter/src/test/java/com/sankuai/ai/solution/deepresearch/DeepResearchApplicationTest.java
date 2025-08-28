@@ -18,7 +18,7 @@ import org.springframework.test.context.TestPropertySource;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Langgraph4j Deep Researcher 应用程序集成测试
+ * Langgraph4j Deep Researcher Application Integration Test
  * 
  * @author imfangs
  */
@@ -51,7 +51,7 @@ class DeepResearchApplicationTest {
 
     @Test
     void contextLoads() {
-        // 验证应用上下文正确加载
+        // Verify application context loads correctly
         assertThat(controller).isNotNull();
         assertThat(service).isNotNull();
         assertThat(searchEngineManager).isNotNull();
@@ -85,10 +85,10 @@ class DeepResearchApplicationTest {
 
     @Test
     void researchRequestValidationWorks() {
-        // 测试无效请求
+        // Test invalid request
         ResearchRequest invalidRequest = ResearchRequest.builder()
-                .researchTopic("") // 空主题
-                .maxResearchLoops(0) // 无效循环次数
+                .researchTopic("") // Empty topic
+                .maxResearchLoops(0) // Invalid loop count
                 .build();
 
         ResponseEntity<String> response = restTemplate.postForEntity(
@@ -102,7 +102,7 @@ class DeepResearchApplicationTest {
 
     @Test
     void validResearchRequestStructure() {
-        // 测试有效请求结构（不实际执行，避免依赖外部服务）
+        // Test valid request structure (not actually executed to avoid external service dependencies)
         ResearchRequest validRequest = ResearchRequest.builder()
                 .researchTopic("Test research topic")
                 .maxResearchLoops(2)
@@ -111,7 +111,7 @@ class DeepResearchApplicationTest {
                 .fetchFullPage(true)
                 .build();
 
-        // 验证请求对象构建正确
+        // Verify request object is built correctly
         assertThat(validRequest.getResearchTopic()).isEqualTo("Test research topic");
         assertThat(validRequest.getMaxResearchLoops()).isEqualTo(2);
         assertThat(validRequest.getSearchEngine()).isEqualTo("tavily");
