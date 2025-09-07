@@ -45,7 +45,11 @@ public class QueryGeneratorNode implements NodeAction<ResearchState> {
             log.debug("User message: {}", userMessage);
 
             // Call LLM to generate query
-            String response = chatModel.chat(userMessage);
+            // String response = chatModel.chat(userMessage);
+            String response = chatModel.chat(
+                    SystemMessage.from(systemPrompt),
+                    UserMessage.from(userMessage)
+            ).aiMessage().text();
 
             // Clean response, extract actual search query
             String searchQuery = cleanResponse(response);
