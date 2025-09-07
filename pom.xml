@@ -29,7 +29,7 @@
         
         <!-- Utility library versions -->
         <jackson.version>2.15.2</jackson.version>
-        <lombok.version>1.18.28</lombok.version>
+        <lombok.version>1.18.40</lombok.version>
         <slf4j.version>2.0.7</slf4j.version>
         <junit.version>5.9.3</junit.version>
     </properties>
